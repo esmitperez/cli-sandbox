@@ -1,14 +1,22 @@
 
+BINARY_NAME=esmit-cli-sandbox
+BINARY_WIN=$(BINARY_NAME).exe
+BINARY_LINUX=$(BINARY_NAME)
+BINARY_RELEASE=2020.5.5
+BINARY_RELEASE_NICKNAME=Margarita 🍸
+
 # Go parameters
 GOCMD=go
-GOBUILD=$(GOCMD) build
+
+# See https://www.digitalocean.com/community/tutorials/using-ldflags-to-set-version-information-for-go-applications
+# the path to pass -ldflag -X was determined with `go tool nm ./cli-sandbox | grep Version`
+LDFLAGS=-X 'esmit.me/cli-sandbox/cmd.Version=$(BINARY_RELEASE) ($(BINARY_RELEASE_NICKNAME))' \
+  -X 'esmit.me/cli-sandbox/cmd.CmdName=$(BINARY_NAME)'
+GOBUILD=$(GOCMD) build -ldflags="$(LDFLAGS)"
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
 
-BINARY_NAME=esmit-cli-sandbox
-BINARY_WIN=$(BINARY_NAME).exe
-BINARY_LINUX=$(BINARY_NAME)
 
 all: test build
 
